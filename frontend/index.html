@@ -33,9 +33,17 @@
             color: #555;
         }
 
-        input,
+
         select {
             width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        input {
+            width: 96.5%;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ddd;
@@ -132,7 +140,7 @@
 
         <label for="smoking_status">Status de Fumante</label>
         <select id="smoking_status" name="smoking_status">
-            <option value="formerly smoked">Fumou no Passado</option>
+            <option value="formerly smoked">Fumou Antigamente</option>
             <option value="never smoked">Nunca Fumou</option>
             <option value="smokes">Fumante</option>
             <option value="Unknown">Desconhecido</option>
@@ -167,7 +175,20 @@
                 .then(results => {
                     document.getElementById('loading').style.display = 'none';
                     const resultsDiv = document.getElementById('results');
-                    resultsDiv.innerHTML = '<h2>Avaliações</h2>';
+                    resultsDiv.innerHTML = '<h2>Predições</h2>';
+
+                    results.predictions.forEach(result => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = 'result';
+                        resultDiv.innerHTML = `
+                            <strong>Modelo:</strong> ${result.Model}<br>
+                            <strong>Teve AVC:</strong> ${result.Prediction}<br>
+                            <strong>Tempo de Execução (s):</strong> ${result["Execution Time (s)"].toFixed(4)}
+                        `;
+                        resultsDiv.appendChild(resultDiv);
+                    });
+
+                    resultsDiv.innerHTML += '<h2>Avaliações</h2>';
 
                     results.evaluation.forEach(result => {
                         const resultDiv = document.createElement('div');
