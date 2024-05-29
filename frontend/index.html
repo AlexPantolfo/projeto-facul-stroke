@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroke Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .result {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Stroke Prediction Form</h1>
+    <form id="predictionForm">
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="hypertension">Hypertension</label>
+        <input type="number" id="hypertension" name="hypertension" required>
+
+        <label for="heart_disease">Heart Disease</label>
+        <input type="number" id="heart_disease" name="heart_disease" required>
+
+        <label for="ever_married">Ever Married</label>
+        <select id="ever_married" name="ever_married">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label for="work_type">Work Type</label>
+        <select id="work_type" name="work_type">
+            <option value="Private">Private</option>
+            <option value="Self-employed">Self-employed</option>
+            <option value="Govt_job">Govt_job</option>
+            <option value="children">children</option>
+            <option value="Never_worked">Never_worked</option>
+        </select>
+
+        <label for="Residence_type">Residence Type</label>
+        <select id="Residence_type" name="Residence_type">
+            <option value="Urban">Urban</option>
+            <option value="Rural">Rural</option>
+        </select>
+
+        <label for="avg_glucose_level">Average Glucose Level</label>
+        <input type="number" id="avg_glucose_level" name="avg_glucose_level" step="0.01" required>
+
+        <label for="bmi">BMI</label>
+        <input type="number" id="bmi" name="bmi" step="0.01" required>
+
+        <label for="smoking_status">Smoking Status</label>
+        <select id="smoking_status" name="smoking_status">
+            <option value="formerly smoked">formerly smoked</option>
+            <option value="never smoked">never smoked</option>
+            <option value="smokes">smokes</option>
+            <option value="Unknown">Unknown</option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <div class="results" id="results"></div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            fetch('URL_DO_BACKEND/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(results => {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = '';
+                    results.forEach(result => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = 'result';
+                        resultDiv.innerHTML = `
+                           <strong>Model:</strong> ${result.Model}<br>
+                           <strong>Accuracy:</strong> ${result.Accuracy.toFixed(2)}<br>
+                           <strong>ROC AUC:</strong> ${result.ROC.toFixed(2)}<br>
+                           <strong>Precision:</strong> ${result.Precision.toFixed(2)}<br>
+                           <strong>Recall:</strong> ${result.Recall.toFixed(2)}<br>
+                           <strong>F1:</strong> ${result.F1.toFixed(2)}<br>
+                           <strong>Execution Time (s):</strong> ${result["Execution Time (s)"].toFixed(2)}
+                       `;
+                        resultsDiv.appendChild(resultDiv);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+
+</html>
