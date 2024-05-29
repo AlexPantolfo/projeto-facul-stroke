@@ -10,8 +10,8 @@ source venv/bin/activate
 # Atualizar pip
 pip install --upgrade pip
 
-# Instalar Gunicorn se não estiver instalado
-pip install gunicorn
+# Instalar as dependências
+pip install -r requirements.txt
 
-# Iniciar o servidor Flask usando Gunicorn
-exec gunicorn --bind 0.0.0.0:5000 backend.app:app
+# Executar o servidor Flask
+exec python app.py

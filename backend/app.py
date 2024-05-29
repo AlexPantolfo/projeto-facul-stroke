@@ -102,32 +102,8 @@ def home():
 @cross_origin()
 def predict():
     try:
-        data = request.json
-        input_df = pd.DataFrame([data])
-        input_df = input_df.replace({
-            'gender': {'Male': 0, 'Female': 1, 'Other': 2},
-            'ever_married': {'Yes': 0, 'No': 1},
-            'work_type': {'Private': 0, 'Self-employed': 1, 'Govt_job': 2, 'children': 3, 'Never_worked': 4},
-            'smoking_status': {'formerly smoked': 0, 'never smoked': 1, 'smokes': 2, 'Unknown': 3},
-            'Residence_type': {'Urban': 0, 'Rural': 1}
-        }).infer_objects()
-
-        results = []
-        for name, model in models:
-            start_time = datetime.now()
-            y_pred = model.predict(input_df)
-            end_time = datetime.now()
-            execution_time = (end_time - start_time).total_seconds()
-
-            results.append({
-                'Model': name,
-                'Prediction': int(y_pred[0]),
-                'Execution Time (s)': execution_time
-            })
-
         evaluation_results = evaluate_models(x_test, y_test)
         return jsonify({
-            'predictions': results,
             'evaluation': evaluation_results
         })
     except Exception as e:
