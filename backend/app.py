@@ -15,7 +15,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Load and preprocess the dataset
-avc = pd.read_csv('/mnt/data/healthcare-dataset-stroke-data-teste.csv')
+avc = pd.read_csv('healthcare-dataset-stroke-data-teste.csv')
 avc = avc.drop(['id'], axis=1)
 avc['bmi'].fillna(avc['bmi'].mean(), inplace=True)
 avc = avc.replace({
