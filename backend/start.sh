@@ -11,4 +11,4 @@ source venv/bin/activate
 pip install gunicorn
 
 # Iniciar o servidor Flask usando Gunicorn
-exec gunicorn --bind 0.0.0.0:5000 app:app
+exec gunicorn --bind 0.0.0.0:5000 backend.app:app
