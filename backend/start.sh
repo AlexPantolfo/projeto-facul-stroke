@@ -10,9 +10,6 @@ source venv/bin/activate
 # Atualizar pip
 pip install --upgrade pip
 
-# Instalar as dependências
-pip install -r requirements.txt
-
 # Instalar Gunicorn se não estiver instalado
 pip install gunicorn
 
